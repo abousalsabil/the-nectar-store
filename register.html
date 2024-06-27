@@ -1,4 +1,6 @@
-<html><head>
+<!DOCTYPE html>
+<html>
+  <head>
   <title>التسجيل - متجر الرحيق</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -70,42 +72,58 @@
 </header>
   <div class="container">
     <h1>التسجيل في متجر الرحيق</h1>
-    <form action="/register" method="POST">
-      <label for="username">اسم المستخدم:</label>
-      <input type="text" id="username" name="username" required>
-      
-      <label for="email">البريد الإلكتروني:</label>
-      <input type="email" id="email" name="email" required>
-      
+    <form id="registrationForm">
+     <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email" required><br><br>
+
       <label for="password">كلمة المرور:</label>
-      <input type="password" id="password" name="password" required>
-      
+      <input type="password" id="password" name="password" required><br><br>
+
       <label for="confirm-password">تأكيد كلمة المرور:</label>
-      <input type="password" id="confirm-password" name="confirm-password" required>
-      
+      <input type="password" id="confirm-password" name="confirm-password" required><br><br>
+
       <button type="submit">تسجيل</button>
     </form>
     <div class="login-link">
       <p>هل لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
     </div>
+      <div id="message"></div>
   </div>
-  
-  <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      var password = document.getElementById('password').value;
-      var confirmPassword = document.getElementById('confirm-password').value;
-      
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script>
+    const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co'; // Replace with your Supabase project URL
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c'; // Replace with your Supabase public key
+    const supabase = new SupabaseClient(supabaseUrl, supabaseKey);
+
+    const registrationForm = document.getElementById('registrationForm');
+    const messageDiv = document.getElementById('message');
+
+    registrationForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const email = registrationForm.email.value;
+      const password = registrationForm.password.value;
+      const confirmPassword = registrationForm['confirm-password'].value;
+
       if (password !== confirmPassword) {
-        alert('كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.');
+        messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
         return;
       }
-      
-      // Here you would typically send the form data to the server
-      alert('تم التسجيل بنجاح!');
-      // Redirect to home page or login page after successful registration
-      window.location.href = '/';
+
+      try {
+        const { user, error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error; 
+
+        messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
+        // You might want to redirect to a success page after a short delay.
+        // setTimeout(() => { window.location.href = 'home.html'; }, 3000); 
+      } catch (error) {
+        messageDiv.textContent = `حدث خطأ: ${error.message}`;
+      }
     });
   </script>
 </body>
