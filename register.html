@@ -1,0 +1,109 @@
+<html><head>
+  <title>التسجيل - متجر الرحيق</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Amiri', serif;
+      background-color: #f9f7f2;
+      color: #333;
+      direction: rtl;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #8b4513;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+    input {
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #ffd700;
+      color: #8b4513;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #ffcc00;
+    }
+    .login-link {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .login-link a {
+      color: #8b4513;
+      text-decoration: none;
+    }
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>التسجيل في متجر الرحيق</h1>
+    <form action="/register" method="POST">
+      <label for="username">اسم المستخدم:</label>
+      <input type="text" id="username" name="username" required>
+      
+      <label for="email">البريد الإلكتروني:</label>
+      <input type="email" id="email" name="email" required>
+      
+      <label for="password">كلمة المرور:</label>
+      <input type="password" id="password" name="password" required>
+      
+      <label for="confirm-password">تأكيد كلمة المرور:</label>
+      <input type="password" id="confirm-password" name="confirm-password" required>
+      
+      <button type="submit">تسجيل</button>
+    </form>
+    <div class="login-link">
+      <p>هل لديك حساب بالفعل؟ <a href="/login">تسجيل الدخول</a></p>
+    </div>
+  </div>
+  
+  <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      var password = document.getElementById('password').value;
+      var confirmPassword = document.getElementById('confirm-password').value;
+      
+      if (password !== confirmPassword) {
+        alert('كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.');
+        return;
+      }
+      
+      // Here you would typically send the form data to the server
+      alert('تم التسجيل بنجاح!');
+      // Redirect to home page or login page after successful registration
+      window.location.href = '/';
+    });
+  </script>
+</body>
+</html>
