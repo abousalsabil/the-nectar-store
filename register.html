@@ -90,41 +90,65 @@
       <div id="message"></div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
- <script>
-    const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co'; // Replace with your Supabase project URL
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c'; // Replace with your Supabase public key
-    const supabase = new SupabaseClient(supabaseUrl, supabaseKey);
+ // Importez createClient depuis @supabase/supabase-js
+import { createClient } from '@supabase/supabase-js'
 
-    const registrationForm = document.getElementById('registrationForm');
-    const messageDiv = document.getElementById('message');
+const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c';
 
-    registrationForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
+// Créez le client Supabase avec createClient
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-      const email = registrationForm.email.value;
-      const password = registrationForm.password.value;
-      const confirmPassword = registrationForm['confirm-password'].value;
+const registrationForm = document.getElementById('registrationForm');
+const messageDiv = document.getElementById('message');
 
-      if (password !== confirmPassword) {
-        messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
-        return;
-      }
+registrationForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
 
-      try {
-        const { user, error } = await supabase.auth.signUp({
-          email: email,
-          password: password,
-        });
+  const email = registrationForm.email.value;
+  const password = registrationForm.password.value;
+  const confirmPassword = registrationForm['confirm-password'].value;
 
-        if (error) throw error; 
+  messageDiv.textContent = ''; // Effacez les messages précédents
 
-        messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
-        // You might want to redirect to a success page after a short delay.
-        // setTimeout(() => { window.location.href = 'home.html'; }, 3000); 
-      } catch (error) {
-        messageDiv.textContent = `حدث خطأ: ${error.message}`;
-      }
+  if (password !== confirmPassword) {
+    messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
+    return;
+  }
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
     });
-  </script>
+
+    if (error) throw error;
+
+    console.log('Réponse de Supabase:', data); // Pour le débogage
+
+    if (data.user) {
+      messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
+      // Redirection optionnelle
+      // setTimeout(() => { window.location.href = 'home.html'; }, 3000);
+    } else {
+      messageDiv.textContent = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
+    }
+  } catch (error) {
+    console.error('Erreur détaillée:', error); // Pour le débogage
+    messageDiv.textContent = `حدث خطأ: ${error.message || 'خطأ غير معروف'}`;
+  }
+});
+
+// Vérifiez la connexion Supabase au chargement de la page
+window.addEventListener('load', async () => {
+  try {
+    const { data, error } = await supabase.from('votre_table').select('count').single();
+    if (error) throw error;
+    console.log('Connexion Supabase réussie');
+  } catch (error) {
+    console.error('Erreur de connexion Supabase:', error);
+    messageDiv.textContent = 'خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة مرة أخرى لاحقًا.';
+  }
+});
 </body>
 </html>
