@@ -1,380 +1,81 @@
 <!DOCTYPE html>
-<html>
-  <head>
-  <title>التسجيل - متجر الرحيق</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: 'Amiri', serif;
-      background-color: #f9f7f2;
-      color: #333;
-      direction: rtl;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #8b4513;
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-bottom: 0.5rem;
-      font-weight: bold;
-    }
-    input {
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-    button {
-      background-color: #ffd700;
-      color: #8b4513;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background-color: #ffcc00;
-    }
-    .login-link {
-      text-align: center;
-      margin-top: 1rem;
-    }
-    .login-link a {
-      color: #8b4513;
-      text-decoration: none;
-    }
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-  </style>
-  </head>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل - متجر الرحيق</title>
+    <style>
+        /* Your existing styles here */
+    </style>
+</head>
 <body>
-  <header>
-  <a href="home.html" style="position: absolute; top: 10px; left: 10px; padding: 8px 12px; background-color: #ffd700; color: #8b4513; text-decoration: none; border-radius: 4px;">العودة للصفحة الرئيسية</a>
-</header>
-  <div class="container">
-    <h1>التسجيل في متجر الرحيق</h1>
-    <form id="registrationForm">
-     <label for="email">البريد الإلكتروني:</label>
-      <input type="email" id="email" name="email" required><br><br>
+    <header>
+        <a href="home.html" class="home-link">العودة للصفحة الرئيسية</a>
+    </header>
+    <div class="container">
+        <h1>التسجيل في متجر الرحيق</h1>
+        <form id="registrationForm">
+            <label for="email">البريد الإلكتروني:</label>
+            <input type="email" id="email" name="email" required>
 
-      <label for="password">كلمة المرور:</label>
-      <input type="password" id="password" name="password" required><br><br>
+            <label for="password">كلمة المرور:</label>
+            <input type="password" id="password" name="password" required>
 
-      <label for="confirm-password">تأكيد كلمة المرور:</label>
-      <input type="password" id="confirm-password" name="confirm-password" required><br><br>
+            <label for="confirm-password">تأكيد كلمة المرور:</label>
+            <input type="password" id="confirm-password" name="confirm-password" required>
 
-      <button type="submit">تسجيل</button>
-    </form>
-    <div id="debug" style="margin-top: 20px; padding: 10px; background-color: #f0f0f0; border: 1px solid #ccc;"></div>
-    <div class="login-link">
-      <p>هل لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+            <button type="submit">تسجيل</button>
+        </form>
+        <div id="message"></div>
+        <div class="login-link">
+            <p>هل لديك حساب بالفعل؟ <a href="login.html">تسجيل الدخول</a></p>
+        </div>
     </div>
-      <div id="message"></div>
-  </div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
-<script >
-// Fonction pour afficher les messages de débogage
-function debug(message) {
-    console.log(message);
-    const debugDiv = document.getElementById('debug');
-    if (debugDiv) {
-        debugDiv.innerHTML += message + '<br>';
-    }
-}
 
-// Attendez que le DOM soit chargé
-document.addEventListener('DOMContentLoaded', () => {
-    debug('DOM chargé');
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c';
+            
+            const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+            
+            const registrationForm = document.getElementById('registrationForm');
+            const messageDiv = document.getElementById('message');
 
-    // Vérifiez si Supabase est chargé
-    if (typeof supabase === 'undefined') {
-        debug('Erreur : Supabase n\'est pas chargé');
-        return;
-    }
+            registrationForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                
+                const email = registrationForm.email.value;
+                const password = registrationForm.password.value;
+                const confirmPassword = registrationForm['confirm-password'].value;
 
-    // Configuration de Supabase
-    const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c';
-    
-    // Initialisation de Supabase
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-    debug('Supabase initialisé');
+                messageDiv.textContent = '';
 
-    const registrationForm = document.getElementById('registrationForm');
-    const messageDiv = document.getElementById('message');
+                if (password !== confirmPassword) {
+                    messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
+                    return;
+                }
 
-    if (!registrationForm) {
-        debug('Formulaire non trouvé !');
-        return;
-    }
+                try {
+                    const { data, error } = await supabase.auth.signUp({
+                        email: email,
+                        password: password,
+                    });
 
-    debug('Formulaire trouvé, ajout du gestionnaire d\'événements');
+                    if (error) throw error;
 
-    registrationForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        debug('Formulaire soumis');
-
-        const email = registrationForm.email.value;
-        const password = registrationForm.password.value;
-        const confirmPassword = registrationForm['confirm-password'].value;
-
-        debug(`Email: ${email}, Mot de passe: ${password.length} caractères`);
-
-        messageDiv.textContent = '';
-
-        if (password !== confirmPassword) {
-            messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
-            debug('Les mots de passe ne correspondent pas');
-            return;
-        }
-
-        try {
-            debug('Tentative d\'inscription avec Supabase');
-            const { data, error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
+                    if (data.user) {
+                        messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
+                    } else {
+                        messageDiv.textContent = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    messageDiv.textContent = `حدث خطأ: ${error.message || 'خطأ غير معروف'}`;
+                }
             });
-
-            if (error) throw error;
-
-            debug('Réponse de Supabase reçue');
-            console.log('Réponse de Supabase:', data);
-
-            if (data.user) {
-                messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
-                debug('Inscription réussie');
-            } else {
-                messageDiv.textContent = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
-                debug('Erreur d\'inscription : pas de données utilisateur');
-            }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            messageDiv.textContent = `حدث خطأ: ${error.message || 'خطأ غير معروف'}`;
-            debug(`Erreur : ${error.message || 'Erreur inconnue'}`);
-        }
-    });
-
-    // Vérification de la connexion Supabase
-    (async () => {
-        try {
-            debug('Vérification de la connexion Supabase');
-            const { data, error } = await supabaseClient.from('votre_table').select('count').single();
-            if (error) throw error;
-            debug('Connexion Supabase réussie');
-        } catch (error) {
-            console.error('Erreur de connexion Supabase:', error);
-            messageDiv.textContent = 'خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة مرة أخرى لاحقًا.';
-            debug(`Erreur de connexion Supabase : ${error.message}`);
-        }
-    })();
-});// Fonction pour afficher les messages de débogage
-function debug(message) {
-    console.log(message);
-    const debugDiv = document.getElementById('debug');
-    if (debugDiv) {
-        debugDiv.innerHTML += message + '<br>';
-    }
-}
-
-// Attendez que le DOM soit chargé
-document.addEventListener('DOMContentLoaded', () => {
-    debug('DOM chargé');
-
-    // Vérifiez si Supabase est chargé
-    if (typeof supabase === 'undefined') {
-        debug('Erreur : Supabase n\'est pas chargé');
-        return;
-    }
-
-    // Configuration de Supabase
-    const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c';
-    
-    // Initialisation de Supabase
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-    debug('Supabase initialisé');
-
-    const registrationForm = document.getElementById('registrationForm');
-    const messageDiv = document.getElementById('message');
-
-    if (!registrationForm) {
-        debug('Formulaire non trouvé !');
-        return;
-    }
-
-    debug('Formulaire trouvé, ajout du gestionnaire d\'événements');
-
-    registrationForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        debug('Formulaire soumis');
-
-        const email = registrationForm.email.value;
-        const password = registrationForm.password.value;
-        const confirmPassword = registrationForm['confirm-password'].value;
-
-        debug(`Email: ${email}, Mot de passe: ${password.length} caractères`);
-
-        messageDiv.textContent = '';
-
-        if (password !== confirmPassword) {
-            messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
-            debug('Les mots de passe ne correspondent pas');
-            return;
-        }
-
-        try {
-            debug('Tentative d\'inscription avec Supabase');
-            const { data, error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-            });
-
-            if (error) throw error;
-
-            debug('Réponse de Supabase reçue');
-            console.log('Réponse de Supabase:', data);
-
-            if (data.user) {
-                messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
-                debug('Inscription réussie');
-            } else {
-                messageDiv.textContent = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
-                debug('Erreur d\'inscription : pas de données utilisateur');
-            }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            messageDiv.textContent = `حدث خطأ: ${error.message || 'خطأ غير معروف'}`;
-            debug(`Erreur : ${error.message || 'Erreur inconnue'}`);
-        }
-    });
-
-    // Vérification de la connexion Supabase
-    (async () => {
-        try {
-            debug('Vérification de la connexion Supabase');
-            const { data, error } = await supabaseClient.from('votre_table').select('count').single();
-            if (error) throw error;
-            debug('Connexion Supabase réussie');
-        } catch (error) {
-            console.error('Erreur de connexion Supabase:', error);
-            messageDiv.textContent = 'خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة مرة أخرى لاحقًا.';
-            debug(`Erreur de connexion Supabase : ${error.message}`);
-        }
-    })();
-});// Fonction pour afficher les messages de débogage
-function debug(message) {
-    console.log(message);
-    const debugDiv = document.getElementById('debug');
-    if (debugDiv) {
-        debugDiv.innerHTML += message + '<br>';
-    }
-}
-
-// Attendez que le DOM soit chargé
-document.addEventListener('DOMContentLoaded', () => {
-    debug('DOM chargé');
-
-    // Vérifiez si Supabase est chargé
-    if (typeof supabase === 'undefined') {
-        debug('Erreur : Supabase n\'est pas chargé');
-        return;
-    }
-
-    // Configuration de Supabase
-    const supabaseUrl = 'https://ztlwmoawlnztwifoorfe.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0bHdtb2F3bG56dHdpZm9vcmZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTk0OTY0OTksImV4cCI6MjAzNTA3MjQ5OX0.8n2E1ENr3MKF62LKkqaCuV5FMA51vGGbQNSYBdtVY8c';
-    
-    // Initialisation de Supabase
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-    debug('Supabase initialisé');
-
-    const registrationForm = document.getElementById('registrationForm');
-    const messageDiv = document.getElementById('message');
-
-    if (!registrationForm) {
-        debug('Formulaire non trouvé !');
-        return;
-    }
-
-    debug('Formulaire trouvé, ajout du gestionnaire d\'événements');
-
-    registrationForm.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        debug('Formulaire soumis');
-
-        const email = registrationForm.email.value;
-        const password = registrationForm.password.value;
-        const confirmPassword = registrationForm['confirm-password'].value;
-
-        debug(`Email: ${email}, Mot de passe: ${password.length} caractères`);
-
-        messageDiv.textContent = '';
-
-        if (password !== confirmPassword) {
-            messageDiv.textContent = 'كلمات المرور غير متطابقة. يرجى المحاولة مرة أخرى.';
-            debug('Les mots de passe ne correspondent pas');
-            return;
-        }
-
-        try {
-            debug('Tentative d\'inscription avec Supabase');
-            const { data, error } = await supabaseClient.auth.signUp({
-                email: email,
-                password: password,
-            });
-
-            if (error) throw error;
-
-            debug('Réponse de Supabase reçue');
-            console.log('Réponse de Supabase:', data);
-
-            if (data.user) {
-                messageDiv.textContent = 'تم التسجيل بنجاح! يرجى التحقق من بريدك الإلكتروني لتأكيد حسابك.';
-                debug('Inscription réussie');
-            } else {
-                messageDiv.textContent = 'حدث خطأ أثناء التسجيل. يرجى المحاولة مرة أخرى.';
-                debug('Erreur d\'inscription : pas de données utilisateur');
-            }
-        } catch (error) {
-            console.error('Erreur détaillée:', error);
-            messageDiv.textContent = `حدث خطأ: ${error.message || 'خطأ غير معروف'}`;
-            debug(`Erreur : ${error.message || 'Erreur inconnue'}`);
-        }
-    });
-
-    // Vérification de la connexion Supabase
-    (async () => {
-        try {
-            debug('Vérification de la connexion Supabase');
-            const { data, error } = await supabaseClient.from('votre_table').select('count').single();
-            if (error) throw error;
-            debug('Connexion Supabase réussie');
-        } catch (error) {
-            console.error('Erreur de connexion Supabase:', error);
-            messageDiv.textContent = 'خطأ في الاتصال بقاعدة البيانات. يرجى المحاولة مرة أخرى لاحقًا.';
-            debug(`Erreur de connexion Supabase : ${error.message}`);
-        }
-    })();
-});
-</script>
+        });
+    </script>
 </body>
 </html>
